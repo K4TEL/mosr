@@ -8,8 +8,8 @@ x3_min, x3_max = -20, 20
 y_min = 200 + (x1_min + x2_min + x3_min)/3
 y_max = 200 + (x1_max + x2_max + x3_max)/3
 
-n = 4
-k = 4
+n = 4  # кількість точок
+k = 4  # кількість коефіцієнтів
 
 norm_factors = np.array([[1, 1, 1],
                          [1, 1, -1],
@@ -53,7 +53,7 @@ def solve_coef(factors, values):
     coef = np.linalg.solve(A, B)
     return coef
 
-# вирішення СЛР для нороманих значень і факторів
+# вирішення СЛР для нормованих значень і факторів
 def solve_norm_coef(factors, values):
     coefs = np.zeros(k)
     coefs[0] = values.mean()
@@ -75,7 +75,7 @@ for i in range(2, 10):
     Gp = std_y.max()/std_y.mean()
     print(f"m = {i} Gp: {Gp}\tGt: {Gt[i-2]}")
     if Gp < Gt[i-2]:
-        m = i
+        m = i  # кількість випробувань
         break
 
 print(f"Mean Y dispersion: {std_y.mean()}")

@@ -13,10 +13,9 @@ y_max = 200 + (x1_max + x2_max + x3_max)/3
 
 l = 1.215
 
-n = 15
-k = 3
-c = 11
-m = 3
+n = 15  # кількість точок
+c = 11 # кількість коефіцієнтів
+m = 3  # кількість випробувань
 
 norm_factors = np.array([[1, 1, 1],
                          [1, 1, -1],
@@ -132,7 +131,7 @@ stud_crit = np.abs(coefs_value) / np.sqrt(std_y.mean()/(n*m))
 ts = 2.042
 sig_ind = np.argwhere(stud_crit > ts)
 
-print(f"All coefs are significant: {len(sig_ind.flatten()) == k}\t{sig_ind.flatten()}")
+print(f"All coefs are significant: {len(sig_ind.flatten()) == m}\t{sig_ind.flatten()}")
 
 # формування планів
 plan = np.concatenate((factors, rand_y), axis=1)
@@ -146,7 +145,7 @@ significant_coefs = np.zeros_like(coefs)
 significant_coefs[sig_ind] = coefs[sig_ind]
 print("Significant coefs", significant_coefs)
 
-reg_val = regression(factors, significant_coefs, n, k)
+reg_val = regression(factors, significant_coefs, n, m)
 print("Natural mean Y - regression Y")
 print(np.column_stack((rand_y.mean(axis=1), reg_val)))
 

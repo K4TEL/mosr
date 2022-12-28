@@ -8,9 +8,8 @@ x3_min, x3_max = 25, 40
 y_min = 200 + (x1_min + x2_min + x3_min)/3
 y_max = 200 + (x1_max + x2_max + x3_max)/3
 
-n = 8
-k = 3
-c = 8
+n = 8  # кількість точок
+c = 8  # кількість коефіцієнтів
 
 norm_factors = np.array([[1, 1, 1],
                          [1, 1, -1],
@@ -90,14 +89,14 @@ for i in range(2, 10):
     f1 = i - 1
     print(f"m = {i} Gp: {Gp}\tGt: {Gt[i-2]}")
     if Gp < Gt[i-2]:
-        m = i
+        m = i  # кількість випробувань
         break
 
 print(f"Mean Y dispersion: {std_y.mean()}")
 
+# формування факторів
 factors = natural(norm_factors)
 factors = np.concatenate((factors, interact_factors(factors)), axis=1)
-
 norm_factors = np.concatenate((norm_factors, interact_factors(norm_factors)), axis=1)
 
 # генерація Y значень для експериментів
@@ -112,7 +111,7 @@ for i in range(3):
 stud_crit = np.abs(coefs_value) / np.sqrt(std_y.mean()/(n*m))
 ts = [2.306, 2.12, 2.064]
 sig_coefs = len(stud_crit[stud_crit > ts[m-2]])
-print(f"All coefs are significant: {sig_coefs == k}\t{sig_coefs}")
+print(f"All coefs are significant: {sig_coefs == m}\t{sig_coefs}")
 
 # формування планів
 norm_plan = np.concatenate((norm_factors, norm_y), axis=1)
@@ -130,7 +129,9 @@ print("Normalized coefs", norm_coefs)
 coefs = solve_coef(factors, rand_y.mean(axis=1))
 print("Natural coefs", coefs)
 
-reg_val = regression(norm_factors, norm_coefs, n, k)
+reg_val = regression(norm_factors, norm_coefs, n, m)
+print("Norm mean Y - regression Y")
+print(np.column_stack((norm_y.mean(axis=1), reg_val)))
 
 # перевірка критерію Фішера
 f3 = n * (m -1) # 8

@@ -9,12 +9,11 @@ x01 = (x1_min + x1_max)/2
 x02 = (x2_min + x2_max)/2
 x03 = (x3_min + x3_max)/2
 
-l = 1.73
+l = 1.73  # значення для зоряних точок плану
 
-n = 14
-k = 3
-c = 11
-m = 2
+n = 14  # кількість точок
+c = 11  # кількість коефіцієнтів
+m = 2  # кількість випробувань
 
 norm_factors = np.array([[1, 1, 1],
                          [1, 1, -1],
@@ -124,7 +123,7 @@ for i in range(m, 10):
     Gp = std_y.max()/std_y.mean()
     print(f"m = {i} Gp: {Gp}\tGt: {Gt}")
     if Gp < Gt:
-        m = i
+        m = i  # кількість випробувань
         break
 
 print(f"Mean Y dispersion: {std_y.mean()}")
@@ -139,7 +138,7 @@ stud_crit = np.abs(coefs_value) / np.sqrt(std_y.mean()/(n*m))
 ts = 2.048
 sig_ind = np.argwhere(stud_crit > ts)
 
-print(f"All coefs are significant: {len(sig_ind.flatten()) == k}\t{sig_ind.flatten()}")
+print(f"All coefs are significant: {len(sig_ind.flatten()) == c}\t{sig_ind.flatten()}")
 
 # формування планів
 plan = np.concatenate((factors, rand_y), axis=1)
@@ -153,7 +152,7 @@ significant_coefs = np.zeros_like(coefs)
 significant_coefs[sig_ind] = coefs[sig_ind]
 print("Significant coefs", significant_coefs)
 
-reg_val = regression(factors, significant_coefs, n, k)
+reg_val = regression(factors, significant_coefs, n, len(sig_ind.flatten()))
 print("Natural mean Y - regression Y")
 print(np.column_stack((rand_y.mean(axis=1), reg_val)))
 
